@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>🗺️ Norte España & Portugal · Abril–Mayo 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e0c; --card: #1a1814; --card2: #201e1a; --border: #2e2b25;
+    --gold: #d4a853; --gold-light: #e8c47a; --cream: #f0e8d8;
+    --muted: #8a8070; --green: #4a7c5a; --blue: #3a6080; --text: #e8e0d0; --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 40px; }
+
+  .hero { background: linear-gradient(160deg, #1a1208 0%, #0f0e0c 60%); border-bottom: 1px solid var(--border); padding: 28px 20px 22px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -40px; right: -40px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(212,168,83,0.12) 0%, transparent 70%); pointer-events: none; }
+  .hero-flag { font-size: 26px; letter-spacing: 4px; margin-bottom: 6px; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--gold-light); line-height: 1.2; margin-bottom: 4px; }
+  .hero-sub { font-size: 13px; color: var(--muted); font-weight: 300; }
+  .hero-dates { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill { display: inline-flex; align-items: center; gap: 5px; background: rgba(212,168,83,0.1); border: 1px solid rgba(212,168,83,0.25); color: var(--gold); font-size: 12px; padding: 5px 10px; border-radius: 30px; font-weight: 500; }
+
+  .nav-wrap { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0 16px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .nav-wrap::-webkit-scrollbar { display: none; }
+  .nav { display: flex; gap: 0; min-width: max-content; }
+  .nav-btn { background: none; border: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; padding: 13px 14px; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .nav-btn:hover { color: var(--text); }
+  .nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  .content { padding: 16px; max-width: 680px; margin: 0 auto; }
+
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .tl-item { display: flex; gap: 14px; }
+  .tl-line { display: flex; flex-direction: column; align-items: center; width: 32px; flex-shrink: 0; }
+  .tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--gold); border: 2px solid var(--bg); flex-shrink: 0; margin-top: 6px; }
+  .tl-dot.flight { background: var(--blue); }
+  .tl-dot.drive { background: var(--muted); width: 8px; height: 8px; margin-top: 8px; }
+  .tl-connector { width: 2px; flex: 1; background: var(--border); margin: 3px 0; min-height: 20px; }
+  .tl-card { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 14px; margin-bottom: 8px; transition: border-color 0.2s, background 0.2s; }
+  .tl-card.clickable { cursor: pointer; }
+  .tl-card.clickable:hover { border-color: var(--gold); background: var(--card2); }
+  .tl-card.drive-card { background: transparent; border: 1px dashed var(--border); padding: 8px 14px; }
+  .tl-city { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--gold-light); font-weight: 700; }
+  .tl-dates { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .tl-hotel { font-size: 12px; color: var(--text); margin-top: 5px; opacity: 0.75; }
+  .tl-nights { display: inline-block; background: rgba(212,168,83,0.1); color: var(--gold); font-size: 11px; padding: 2px 8px; border-radius: 20px; margin-top: 6px; font-weight: 500; }
+  .drive-label { font-size: 12px; color: var(--muted); font-style: italic; }
+
+  .city-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; gap: 12px; }
+  .city-title { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--gold-light); font-weight: 700; line-height: 1.1; }
+  .city-country { font-size: 13px; color: var(--muted); margin-top: 3px; }
+  .city-dates-badge { background: rgba(212,168,83,0.1); border: 1px solid rgba(212,168,83,0.2); border-radius: 10px; padding: 8px 12px; text-align: center; flex-shrink: 0; }
+  .city-dates-badge .nights { font-size: 20px; font-weight: 700; color: var(--gold); line-height: 1; }
+  .city-dates-badge .nights-label { font-size: 10px; color: var(--muted); }
+
+  .hotel-card { background: linear-gradient(135deg, rgba(74,124,90,0.15), rgba(30,60,40,0.2)); border: 1px solid rgba(74,124,90,0.3); border-radius: var(--radius); padding: 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+  .hotel-icon { font-size: 24px; flex-shrink: 0; }
+  .hotel-detail { flex: 1; }
+  .hotel-name { font-size: 14px; font-weight: 600; color: var(--text); }
+  .hotel-dates { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .hotel-map-btn { display: flex; align-items: center; justify-content: center; background: rgba(74,124,90,0.25); border: 1px solid rgba(74,124,90,0.4); border-radius: 8px; padding: 7px 10px; color: #7abf8a; font-size: 11px; font-weight: 500; cursor: pointer; text-decoration: none; white-space: nowrap; flex-shrink: 0; transition: background 0.2s; }
+  .hotel-map-btn:hover { background: rgba(74,124,90,0.4); }
+
+  .map-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 13px; background: var(--blue); border: none; border-radius: var(--radius); color: #fff; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; margin-bottom: 16px; transition: opacity 0.2s; }
+  .map-btn:hover { opacity: 0.85; }
+
+  .section { margin-bottom: 20px; }
+  .section-title { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .item-list { display: flex; flex-direction: column; gap: 8px; }
+  .item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 13px; display: flex; align-items: flex-start; gap: 10px; }
+  .item-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .item-body { flex: 1; }
+  .item-name { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.3; }
+  .item-desc { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+  .item-tag { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 20px; margin-top: 5px; font-weight: 500; margin-right: 3px; }
+  .tag-baby { background: rgba(74,124,90,0.2); color: #7abf8a; }
+  .tag-food { background: rgba(192,74,58,0.2); color: #e07060; }
+  .tag-culture { background: rgba(58,96,128,0.2); color: #7aabcf; }
+  .tag-walk { background: rgba(212,168,83,0.15); color: var(--gold); }
+  .item-map-btn { display: flex; align-items: center; justify-content: center; background: rgba(58,96,128,0.25); border: 1px solid rgba(58,96,128,0.4); border-radius: 8px; padding: 6px 9px; color: #7aabcf; font-size: 11px; font-weight: 500; cursor: pointer; text-decoration: none; white-space: nowrap; flex-shrink: 0; transition: background 0.2s; }
+  .item-map-btn:hover { background: rgba(58,96,128,0.4); }
+
+  .tip-box { background: rgba(212,168,83,0.07); border: 1px solid rgba(212,168,83,0.2); border-radius: 10px; padding: 12px 13px; font-size: 13px; color: var(--cream); line-height: 1.5; }
+  .tip-box strong { color: var(--gold); }
+
+  .drive-info { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 14px; }
+  .drive-icon { font-size: 28px; }
+  .drive-detail { flex: 1; }
+  .drive-km { font-size: 20px; font-weight: 700; color: var(--gold); }
+  .drive-dur { font-size: 12px; color: var(--muted); }
+
+  .flight-card { background: linear-gradient(135deg, rgba(58,96,128,0.2), rgba(30,50,80,0.3)); border: 1px solid rgba(58,96,128,0.35); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; }
+  .flight-route { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .flight-city { font-size: 22px; font-weight: 700; color: var(--text); }
+  .flight-arrow { color: var(--gold); font-size: 18px; flex: 1; text-align: center; }
+  .flight-info-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .flight-detail { font-size: 12px; color: var(--muted); }
+  .flight-detail strong { color: var(--text); display: block; font-size: 14px; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+  .back-btn { background: none; border: none; color: var(--gold); font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 8px 0; margin-bottom: 14px; }
+
+  .check-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+  .check-item:last-child { border-bottom: none; }
+  .checkbox { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.2s; }
+  .check-item.done .checkbox { background: var(--green); border-color: var(--green); }
+  .check-item.done .check-text { text-decoration: line-through; color: var(--muted); }
+  .check-text { font-size: 14px; }
+
+  @media(max-width: 380px) { .hero h1 { font-size: 22px; } .city-title { font-size: 24px; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-flag">🇺🇾 ✈️ 🇪🇸 🇵🇹</div>
+  <h1>Norte España & Portugal</h1>
+  <div class="hero-sub">Familia · Abril – Mayo 2025</div>
+  <div class="hero-dates">
+    <span class="pill">✈️ Lun 20 Abr · Sale 21:45</span>
+    <span class="pill">🏠 Vuelta Sáb 10 May</span>
+    <span class="pill">👶 + bebé 18m</span>
+    <span class="pill">🚗 Auto 21 Abr – 8 May</span>
+  </div>
+</div>
+
+<div class="nav-wrap">
+  <nav class="nav">
+    <button class="nav-btn active" onclick="showPage('overview')">Resumen</button>
+    <button class="nav-btn" onclick="showPage('madrid1')">Madrid</button>
+    <button class="nav-btn" onclick="showPage('sansebastian')">S. Sebastián</button>
+    <button class="nav-btn" onclick="showPage('bilbao')">Bilbao</button>
+    <button class="nav-btn" onclick="showPage('oviedo')">Oviedo</button>
+    <button class="nav-btn" onclick="showPage('santiago')">Santiago</button>
+    <button class="nav-btn" onclick="showPage('porto')">Porto</button>
+    <button class="nav-btn" onclick="showPage('lisboa')">Lisboa</button>
+    <button class="nav-btn" onclick="showPage('trujillo')">Trujillo</button>
+    <button class="nav-btn" onclick="showPage('checklist')">✓ Lista</button>
+  </nav>
+</div>
+
+<div class="content">
+
+<!-- OVERVIEW -->
+<div id="overview" class="page active">
+  <div class="timeline">
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot flight"></div><div class="tl-connector"></div></div>
+      <div class="tl-card">
+        <div class="tl-city">✈️ Vuelo MVD → MAD</div>
+        <div class="tl-dates">Lun 20 Abr · Iberia · Sale 21:45</div>
+        <div class="tl-nights">Llega martes 21 por la mañana</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-card clickable" onclick="showPage('madrid1')">
+        <div class="tl-city">🏛️ Madrid — Llegada</div>
+        <div class="tl-dates">Mar 21 Abr — Mié 22 Abr</div>
+        <div class="tl-hotel">🏨 B&B Hotel Madrid Aeropuerto T4</div>
+        <div class="tl-nights">1 noche</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot drive"></div><div class="tl-connector"></div></div>
+      <div class="tl-card drive-card"><div class="drive-label">🚗 Madrid → San Sebastián · ~450 km · ~4.5 hs</div></div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-card clickable" onclick="showPage('sansebastian')">
+        <div class="tl-city">🦞 San Sebastián</div>
+        <div class="tl-dates">Mié 22 Abr — Vie 24 Abr</div>
+        <div class="tl-hotel">🏨 Sercotel Codina</div>
+        <div class="tl-nights">2 noches</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot drive"></div><div class="tl-connector"></div></div>
+      <div class="tl-card drive-card"><div class="drive-label">🚗 San Sebastián → Bilbao · ~100 km · ~1 hs</div></div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-card clickable" onclick="showPage('bilbao')">
+        <div class="tl-city">🏛️ Bilbao</div>
+        <div class="tl-dates">Vie 24 Abr — Dom 26 Abr</div>
+        <div class="tl-hotel">🏨 Barceló Bilbao Nervión</div>
+        <div class="tl-nights">2 noches</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot drive"></div><div class="tl-connector"></div></div>
+      <div class="tl-card drive-card"><div class="drive-label">🚗 Bilbao → Oviedo · ~200 km · ~2.5 hs</div></div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-card clickable" onclick="showPage('oviedo')">
+        <div class="tl-city">🏔️ Oviedo</div>
+        <div class="tl-dates">Dom 26 Abr — Mar 28 Abr</div>
+        <div class="tl-hotel">🏨 Hotel & Spa Princesa Munia</div>
+        <div class="tl-nights">2 noches</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot drive"></div><div class="tl-connector"></div></div>
+      <div class="tl-card drive-card"><div class="drive-label">🚗 Oviedo → Santiago · ~300 km · ~3 hs</div></div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-card clickable" onclick="showPage('santiago')">
+        <div class="tl-city">⛪ Santiago de Compostela</div>
+        <div class="tl-dates">Mar 28 Abr — Vie 1 May</div>
+        <div class="tl-hotel">🏨 Exe Peregrino</div>
+        <div class="tl-nights">3 noches</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot drive"></div><div class="tl-connector"></div></div>
+      <div class="tl-card drive-card"><div class="drive-label">🚗 Santiago → Porto · ~170 km · ~2 hs</div></div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-card clickable" onclick="showPage('porto')">
+        <div class="tl-city">🍷 Porto</div>
+        <div class="tl-dates">Vie 1 May — Dom 3 May</div>
+        <div class="tl-hotel">🏠 Airbnb · Rua da Alegria 362</div>
+        <div class="tl-nights">2 noches</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot drive"></div><div class="tl-connector"></div></div>
+      <div class="tl-card drive-card"><div class="drive-label">🚗 Porto → Lisboa · ~310 km · ~3 hs</div></div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-card clickable" onclick="showPage('lisboa')">
+        <div class="tl-city">🛤️ Lisboa</div>
+        <div class="tl-dates">Dom 3 May — Jue 7 May</div>
+        <div class="tl-hotel">🏠 Airbnb · Av. Eng. Duarte Pacheco 5</div>
+        <div class="tl-nights">4 noches</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot drive"></div><div class="tl-connector"></div></div>
+      <div class="tl-card drive-card"><div class="drive-label">🚗 Lisboa → Trujillo · ~260 km · ~2.5 hs</div></div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-card clickable" onclick="showPage('trujillo')">
+        <div class="tl-city">🏰 Trujillo</div>
+        <div class="tl-dates">Jue 7 May — Vie 8 May</div>
+        <div class="tl-hotel">🏨 Izan Trujillo</div>
+        <div class="tl-nights">1 noche</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot drive"></div><div class="tl-connector"></div></div>
+      <div class="tl-card drive-card"><div class="drive-label">🚗 Trujillo → Madrid · ~250 km · ~2.5 hs (devolver auto)</div></div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-card clickable" onclick="showPage('madrid1')">
+        <div class="tl-city">🏛️ Madrid — Final</div>
+        <div class="tl-dates">Vie 8 May — Sáb 10 May</div>
+        <div class="tl-hotel">🏨 Ibis Styles Madrid Centro Maravillas</div>
+        <div class="tl-nights">2 noches</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-line"><div class="tl-dot flight"></div></div>
+      <div class="tl-card">
+        <div class="tl-city">✈️ Vuelo MAD → MVD</div>
+        <div class="tl-dates">Sáb 10 May · Iberia · Rumbo a casa 🏠</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MADRID -->
+<div id="madrid1" class="page">
+  <button class="back-btn" onclick="showPage('overview')">← Volver al resumen</button>
+  <div class="city-header">
+    <div><div class="city-title">Madrid</div><div class="city-country">🇪🇸 España · Llegada + Despedida</div></div>
+    <div class="city-dates-badge"><div class="nights">3</div><div class="nights-label">noches total</div></div>
+  </div>
+
+  <div class="flight-card">
+    <div class="flight-route">
+      <div class="flight-city">MVD</div><div class="flight-arrow">✈️ ————</div><div class="flight-city">MAD</div>
+    </div>
+    <div class="flight-info-row">
+      <div class="flight-detail"><strong>Lun 20 Abr</strong>Sale 21:45</div>
+      <div class="flight-detail"><strong>Iberia</strong>Directo ~12 hs</div>
+      <div class="flight-detail"><strong>Llega Mar 21</strong>por la mañana</div>
+    </div>
+  </div>
+
+  <div class="hotel-card">
+    <div class="hotel-icon">🏨</div>
+    <div class="hotel-detail">
+      <div class="hotel-name">B&B Hotel Madrid Aeropuerto T4</div>
+      <div class="hotel-dates">Mar 21 Abr · 1 noche · Llegada — justo al lado del aeropuerto</div>
+    </div>
+    <a class="hotel-map-btn" href="https://maps.google.com/?q=B%26B+Hotel+Madrid+Aeropuerto+T4" target="_blank">🗺️ Maps</a>
+  </div>
+
+  <div class="hotel-card">
+    <div class="hotel-icon">🏨</div>
+    <div class="hotel-detail">
+      <div class="hotel-name">Ibis Styles Madrid Centro Maravillas</div>
+      <div class="hotel-dates">Vie 8 – Sáb 10 May · 2 noches · Final del viaje</div>
+    </div>
+    <a class="hotel-map-btn" href="https://maps.google.com/?q=Ibis+Styles+Madrid+Centro+Maravillas" target="_blank">🗺️ Maps</a>
+  </div>
+
+  <a class="map-btn" href="https://maps.google.com/?q=Madrid,+España" target="_blank">📍 Abrir Madrid en Maps</a>
+
+  <div class="section">
+    <div class="section-title">🌅 Itinerario · Mar 21 Abr — Llegada</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🛬</div><div class="item-body"><div class="item-name">Atterrizaje Barajas T4 + retirar auto</div><div class="item-desc">Migración, equipaje, agencia de alquiler. Tomárselo con calma — llegada después de 12 hs de vuelo con bebé.</div></div></div>
+      <div class="item"><div class="item-icon">🏨</div><div class="item-body"><div class="item-name">Check-in B&B Hotel</div><div class="item-desc">El hotel está literalmente a 2 min del aeropuerto. Dejar el equipaje y respirar.</div></div></div>
+      <div class="item"><div class="item-icon">🛒</div><div class="item-body"><div class="item-name">Centro Comercial Plaza Norte 2</div><div class="item-desc">Enfrente del hotel. Compras para la bebé — frutas, alimentos y lo que necesiten para los primeros días del viaje.</div></div><a class="item-map-btn" href="https://maps.google.com/?q=Centro+Comercial+Plaza+Norte+2,+San+Sebastián+de+los+Reyes,+Madrid" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">😴</div><div class="item-body"><div class="item-name">Descanso</div><div class="item-desc">Nada más. Vuelo largo, bebé, jet lag leve — el plan es dormir bien para arrancar frescos hacia San Sebastián al día siguiente.</div></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🌟 Madrid Final · Vie 8 – Sáb 10 May</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🎨</div><div class="item-body"><div class="item-name">Museo del Prado</div><div class="item-desc">Velázquez, Goya, Rubens. Ir temprano, primera hora. Tienen carrito disponible.</div><span class="item-tag tag-culture">🎭 Cultura</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Museo+del+Prado,+Madrid" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">👑</div><div class="item-body"><div class="item-name">Plaza Mayor + Sol + Palacio Real</div><div class="item-desc">Centro histórico. Muy caminable con cochecito. Los jardines del Palacio Real son preciosos.</div><span class="item-tag tag-walk">🚶 Paseo</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Plaza+Mayor,+Madrid" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🍷</div><div class="item-body"><div class="item-name">Mercado de San Miguel</div><div class="item-desc">Tapas, vinos, jamón ibérico. Excelente para comer en modo casual.</div><span class="item-tag tag-food">🍽️ Gastronomía</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Mercado+de+San+Miguel,+Madrid" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🦁</div><div class="item-body"><div class="item-name">Zoo de Madrid</div><div class="item-desc">Opción relajada con la nena antes del vuelo de vuelta.</div><span class="item-tag tag-baby">👶 Ideal</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Zoo+Aquarium+Madrid" target="_blank">🗺️ Ver</a></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">💡 Tips Madrid</div>
+    <div class="tip-box"><strong>Llegada:</strong> El B&B T4 está literalmente al lado del aeropuerto — perfecto para el primer día cansado con bebé.<br><br><strong>Horarios españoles:</strong> Lunch 14-15hs, cena 21hs+. Con la nena conviene comer antes o buscar restaurantes que abran a las 12.<br><br><strong>Final del viaje:</strong> El Ibis Maravillas está en el barrio de Malasaña — muy bien ubicado para el centro.</div>
+  </div>
+</div>
+
+<!-- SAN SEBASTIÁN -->
+<div id="sansebastian" class="page">
+  <button class="back-btn" onclick="showPage('overview')">← Volver al resumen</button>
+  <div class="city-header">
+    <div><div class="city-title">San Sebastián</div><div class="city-country">🇪🇸 País Vasco · Donostia</div></div>
+    <div class="city-dates-badge"><div class="nights">2</div><div class="nights-label">noches</div></div>
+  </div>
+  <div class="drive-info">
+    <div class="drive-icon">🚗</div>
+    <div class="drive-detail"><div class="drive-km">~450 km</div><div class="drive-dur">Madrid → San Sebastián · ~4.5 hs por A-1</div></div>
+    <a class="item-map-btn" href="https://maps.google.com/maps/dir/Madrid/San+Sebastián,+España" target="_blank">🗺️ Ruta</a>
+  </div>
+  <div class="hotel-card">
+    <div class="hotel-icon">🏨</div>
+    <div class="hotel-detail"><div class="hotel-name">Sercotel Codina</div><div class="hotel-dates">Mié 22 Abr — Vie 24 Abr · 2 noches</div></div>
+    <a class="hotel-map-btn" href="https://maps.google.com/?q=Sercotel+Codina,+San+Sebastián" target="_blank">🗺️ Maps</a>
+  </div>
+  <a class="map-btn" href="https://maps.google.com/?q=San+Sebastián,+España" target="_blank">📍 Abrir San Sebastián en Maps</a>
+
+  <div class="section">
+    <div class="section-title">📅 Día 1 · Mié 23 Abr — Llegada</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🚗</div><div class="item-body"><div class="item-name">Viaje Madrid → San Sebastián</div><div class="item-desc">~450 km · ~4.5 hs. Salida después del desayuno, almuerzo en ruta.</div></div></div>
+      <div class="item"><div class="item-icon">🏨</div><div class="item-body"><div class="item-name">Check-in Sercotel Codina</div><div class="item-desc">Llegada ~15-16hs. Dejar el equipaje y descansar un rato.</div></div></div>
+      <div class="item"><div class="item-icon">🌊</div><div class="item-body"><div class="item-name">Paseo por Playa de La Concha</div><div class="item-desc">Salida tranquila al atardecer. El paseo marítimo es plano y perfecto para el cochecito. Primera impresión de la ciudad.</div><span class="item-tag tag-baby">👶 Ideal cochecito</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Playa+La+Concha,+San+Sebastián" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🍽️</div><div class="item-body"><div class="item-name">Cena — Opciones cerca de La Concha</div><div class="item-desc">Elegí una de las opciones de abajo 👇</div></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🍷 Opciones cena Día 1 — cerca de La Concha</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🌊</div><div class="item-body"><div class="item-name">Restaurante Biarritz</div><div class="item-desc">Justo sobre el Paseo de La Concha, vistas directas a la bahía. Cocina vasca tradicional con toque moderno. Terraza disponible mayo-octubre. Ambiente tranquilo, ideal para ir con bebé.</div><span class="item-tag tag-food">🍽️ Vistas al mar</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Restaurante+Biarritz,+San+Sebastián" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">☕</div><div class="item-body"><div class="item-name">Café de La Concha</div><div class="item-desc">En el centro mismo de la bahía. Cafetería-restaurante con grandes ventanales al mar y dos terrazas. Horario amplio e ininterrumpido. Más informal, perfecto para ir con la nena.</div><span class="item-tag tag-baby">👶 Muy familiar</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Café+de+La+Concha,+San+Sebastián" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🐟</div><div class="item-body"><div class="item-name">Restaurante Igeldo</div><div class="item-desc">En el puerto, a 100m de La Concha. Especializado en mariscos y pescados frescos. Terraza al aire libre, menú infantil disponible. Ambiente muy familiar.</div><span class="item-tag tag-food">🍽️ Mariscos</span><span class="item-tag tag-baby">👶 Menú infantil</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Restaurante+Igeldo,+San+Sebastián" target="_blank">🗺️ Ver</a></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📅 Día 2 · Jue 24 Abr — Día completo</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🏖️</div><div class="item-body"><div class="item-name">Mañana — Playa de Ondarreta → La Concha</div><div class="item-desc">Bajar caminando hasta la Playa de Ondarreta y caminar todo el paseo hasta el Casco Antiguo. Uno de los paseos más lindos de España. Plano y perfecto para cochecito.</div><span class="item-tag tag-baby">👶 Ideal cochecito</span><span class="item-tag tag-walk">🚶 Paseo imperdible</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Playa+de+Ondarreta,+San+Sebastián" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🥂</div><div class="item-body"><div class="item-name">Almuerzo — Pintxos en el Casco Antiguo</div><div class="item-desc">Llegada al mediodía — el mejor momento para pintxos con bebé (menos gente que de noche). Bar Txepetxa, La Cuchara de San Telmo, Bar Borda Berri.</div><span class="item-tag tag-food">🍽️ Imperdible</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Parte+Vieja,+San+Sebastián" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🚡</div><div class="item-body"><div class="item-name">Tarde — Funicular Monte Igueldo</div><div class="item-desc">Funicular histórico hasta la cima. Vistas panorámicas de toda la bahía. La nena va a amar el funicular.</div><span class="item-tag tag-baby">👶 Le encanta</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Funicular+Monte+Igueldo,+San+Sebastián" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🌊</div><div class="item-body"><div class="item-name">Bajando — Peine del Viento</div><div class="item-desc">Las esculturas de Chillida al borde del mar. Atardecer increíble. Ojo: algunos tramos tienen escalones — llevar portabebé para esta parte.</div><span class="item-tag tag-walk">🚶 Atardecer</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Peine+del+Viento,+San+Sebastián" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🍽️</div><div class="item-body"><div class="item-name">Cena — Zona del hotel</div><div class="item-desc">De vuelta hacia el Sercotel Codina. Mismas opciones del Día 1 o explorar algún bar de pintxos cerca del hotel.</div></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">💡 Tips San Sebastián</div>
+    <div class="tip-box"><strong>Pintxos con bebé:</strong> Los bares son pequeños y muy llenos de noche. Ir a mediodía (13-14hs) es mucho más tranquilo.<br><br><strong>Estacionamiento:</strong> El centro tiene poca zona libre. Usá los parkings cubiertos cerca del casco viejo.<br><br><strong>Peine del Viento:</strong> Hay escalones — llevá el portabebé para esa parte del recorrido.<br><br><strong>Clima:</strong> País Vasco — puede llover. Llevá impermeable para todos.</div>
+  </div>
+</div>
+
+<!-- BILBAO -->
+<div id="bilbao" class="page">
+  <button class="back-btn" onclick="showPage('overview')">← Volver al resumen</button>
+  <div class="city-header">
+    <div><div class="city-title">Bilbao</div><div class="city-country">🇪🇸 País Vasco</div></div>
+    <div class="city-dates-badge"><div class="nights">2</div><div class="nights-label">noches</div></div>
+  </div>
+  <div class="drive-info">
+    <div class="drive-icon">🚗</div>
+    <div class="drive-detail"><div class="drive-km">~100 km</div><div class="drive-dur">San Sebastián → Bilbao · ~1 hs por AP-8</div></div>
+    <a class="item-map-btn" href="https://maps.google.com/maps/dir/San+Sebastián/Bilbao" target="_blank">🗺️ Ruta</a>
+  </div>
+  <div class="hotel-card">
+    <div class="hotel-icon">🏨</div>
+    <div class="hotel-detail"><div class="hotel-name">Barceló Bilbao Nervión</div><div class="hotel-dates">Vie 24 Abr — Dom 26 Abr · 2 noches</div></div>
+    <a class="hotel-map-btn" href="https://maps.google.com/?q=Barceló+Bilbao+Nervión" target="_blank">🗺️ Maps</a>
+  </div>
+  <a class="map-btn" href="https://maps.google.com/?q=Bilbao,+España" target="_blank">📍 Abrir Bilbao en Maps</a>
+
+  <div class="section">
+    <div class="section-title">🎨 Arte y cultura</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🐶</div><div class="item-body"><div class="item-name">Museo Guggenheim Bilbao</div><div class="item-desc">El perro de flores gigante (Puppy) y la araña Mamá son un hit para niños. La nena va a alucinar. Comprá entradas online.</div><span class="item-tag tag-culture">🎭 Imperdible</span><span class="item-tag tag-baby">👶 Le encanta</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Museo+Guggenheim+Bilbao" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🌁</div><div class="item-body"><div class="item-name">Puente Colgante de Vizcaya</div><div class="item-desc">Patrimonio UNESCO. El puente transbordador más antiguo del mundo. A 15 min. Pueden cruzarlo en la góndola.</div><span class="item-tag tag-culture">🎭 UNESCO</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Puente+Colgante+Vizcaya,+Portugalete" target="_blank">🗺️ Ver</a></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🚶 Paseos</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🌉</div><div class="item-body"><div class="item-name">Casco Viejo — Las Siete Calles</div><div class="item-desc">Mercado de La Ribera (el más grande de Europa), pintxos. Muy peatonal y accesible con cochecito.</div><span class="item-tag tag-walk">🚶 Paseo</span><span class="item-tag tag-food">🍽️ Pintxos</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Casco+Viejo+Bilbao" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🌿</div><div class="item-body"><div class="item-name">Parque de Doña Casilda</div><div class="item-desc">Lago, patos y áreas de juego. Al lado del Museo de Bellas Artes. Ideal para que la nena juegue.</div><span class="item-tag tag-baby">👶 Ideal bebés</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Parque+de+Doña+Casilda,+Bilbao" target="_blank">🗺️ Ver</a></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">💡 Tips Bilbao</div>
+    <div class="tip-box"><strong>Guggenheim:</strong> Con bebé en carrito entran sin problema. Hay guardarropa para el cochecito.<br><br><strong>Ría de Bilbao:</strong> El frente al río (Abandoibarra) es peatonal y completamente plano — perfecto para pasear después del museo.<br><br><strong>Semana Santa:</strong> El 24 de Abr es viernes — fin de semana largo. Verificá horarios de museos.</div>
+  </div>
+</div>
+
+<!-- OVIEDO -->
+<div id="oviedo" class="page">
+  <button class="back-btn" onclick="showPage('overview')">← Volver al resumen</button>
+  <div class="city-header">
+    <div><div class="city-title">Oviedo</div><div class="city-country">🇪🇸 Asturias</div></div>
+    <div class="city-dates-badge"><div class="nights">2</div><div class="nights-label">noches</div></div>
+  </div>
+  <div class="drive-info">
+    <div class="drive-icon">🚗</div>
+    <div class="drive-detail"><div class="drive-km">~200 km</div><div class="drive-dur">Bilbao → Oviedo · ~2.5 hs · Ruta costera</div></div>
+    <a class="item-map-btn" href="https://maps.google.com/maps/dir/Bilbao/Oviedo" target="_blank">🗺️ Ruta</a>
+  </div>
+  <div class="hotel-card">
+    <div class="hotel-icon">🏨</div>
+    <div class="hotel-detail"><div class="hotel-name">Hotel & Spa Princesa Munia</div><div class="hotel-dates">Dom 26 Abr — Mar 28 Abr · 2 noches</div></div>
+    <a class="hotel-map-btn" href="https://maps.google.com/?q=Hotel+Spa+Princesa+Munia,+Oviedo" target="_blank">🗺️ Maps</a>
+  </div>
+  <a class="map-btn" href="https://maps.google.com/?q=Oviedo,+Asturias,+España" target="_blank">📍 Abrir Oviedo en Maps</a>
+
+  <div class="section">
+    <div class="section-title">⛪ Ciudad histórica</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🏰</div><div class="item-body"><div class="item-name">Catedral de Oviedo — Cámara Santa</div><div class="item-desc">Gótica y majestuosa. La Cámara Santa es Patrimonio de la Humanidad.</div><span class="item-tag tag-culture">🎭 Patrimonio</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Catedral+de+Oviedo" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🗿</div><div class="item-body"><div class="item-name">Casco histórico + Woody Allen</div><div class="item-desc">Plaza del Ayuntamiento, calle Uría. Woody Allen tiene estatua en la calle — es gran fan de Oviedo.</div><span class="item-tag tag-walk">🚶 Paseo</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Estatua+Woody+Allen,+Oviedo" target="_blank">🗺️ Ver</a></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🌿 Excursiones cerca</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🌊</div><div class="item-body"><div class="item-name">Playa de San Lorenzo — Gijón</div><div class="item-desc">A solo 30 min. Playa urbana enorme con paseo marítimo. La nena va a amar la arena.</div><span class="item-tag tag-baby">👶 Ideal bebés</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Playa+de+San+Lorenzo,+Gijón" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🏔️</div><div class="item-body"><div class="item-name">Picos de Europa — Covadonga</div><div class="item-desc">Santuario de Covadonga + Lagos. Paisajes increíbles a 1 hs. Los lagos pueden tener nieve en abril — verificá antes.</div><span class="item-tag tag-walk">🚶 Naturaleza</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Santuario+de+Covadonga,+Asturias" target="_blank">🗺️ Ver</a></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🍺 Gastronomía asturiana</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🍺</div><div class="item-body"><div class="item-name">Sidra escanciada</div><div class="item-desc">Capital de la sidra asturiana. El escanciado (servir de altura) es un ritual. Pedí un "culín" para probar.</div><span class="item-tag tag-food">🍽️ Típico</span></div></div>
+      <div class="item"><div class="item-icon">🫕</div><div class="item-body"><div class="item-name">Fabada Asturiana</div><div class="item-desc">Judías blancas con chorizo, morcilla y tocino. El plato emblema regional. Para el almuerzo.</div><span class="item-tag tag-food">🍽️ Gastronomía</span></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">💡 Tips Oviedo</div>
+    <div class="tip-box"><strong>Hotel con Spa:</strong> El Princesa Munia tiene spa — si tienen un rato, aprovéchenlo.<br><br><strong>Covadonga:</strong> El Santuario siempre está abierto y es muy lindo. Los Lagos pueden estar cerrados por nieve en abril.</div>
+  </div>
+</div>
+
+<!-- SANTIAGO -->
+<div id="santiago" class="page">
+  <button class="back-btn" onclick="showPage('overview')">← Volver al resumen</button>
+  <div class="city-header">
+    <div><div class="city-title">Santiago de Compostela</div><div class="city-country">🇪🇸 Galicia</div></div>
+    <div class="city-dates-badge"><div class="nights">3</div><div class="nights-label">noches</div></div>
+  </div>
+  <div class="drive-info">
+    <div class="drive-icon">🚗</div>
+    <div class="drive-detail"><div class="drive-km">~300 km</div><div class="drive-dur">Oviedo → Santiago · ~3 hs por A-6</div></div>
+    <a class="item-map-btn" href="https://maps.google.com/maps/dir/Oviedo/Santiago+de+Compostela" target="_blank">🗺️ Ruta</a>
+  </div>
+  <div class="hotel-card">
+    <div class="hotel-icon">🏨</div>
+    <div class="hotel-detail"><div class="hotel-name">Exe Peregrino</div><div class="hotel-dates">Mar 28 Abr — Vie 1 May · 3 noches</div></div>
+    <a class="hotel-map-btn" href="https://maps.google.com/?q=Exe+Peregrino,+Santiago+de+Compostela" target="_blank">🗺️ Maps</a>
+  </div>
+  <a class="map-btn" href="https://maps.google.com/?q=Santiago+de+Compostela,+España" target="_blank">📍 Abrir Santiago en Maps</a>
+
+  <div class="section">
+    <div class="section-title">⛪ Lo esencial</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">✝️</div><div class="item-body"><div class="item-name">Catedral — Botafumeiro</div><div class="item-desc">El Botafumeiro (incensario gigante) vuela miércoles y domingos en la Misa del Peregrino. Llegás el mar 28 — el miércoles 29 de abril es tu primera oportunidad. Espectacular para la nena.</div><span class="item-tag tag-culture">🎭 UNESCO</span><span class="item-tag tag-baby">👶 El botafumeiro!</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Catedral+de+Santiago+de+Compostela" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🏛️</div><div class="item-body"><div class="item-name">Plaza del Obradoiro</div><div class="item-desc">La plaza más impresionante de España. Hostal de los Reyes Católicos (hoy Parador), Palacio de Rajoy. Imprescindible.</div><span class="item-tag tag-walk">🚶 Imperdible</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Plaza+del+Obradoiro,+Santiago+de+Compostela" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🛒</div><div class="item-body"><div class="item-name">Mercado de Abastos</div><div class="item-desc">El mercado gallego más famoso. Pulpo fresco, mariscos, quesos. Las rúas históricas tienen soportales para caminar bajo la lluvia.</div><span class="item-tag tag-food">🍽️ Imperdible</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Mercado+de+Abastos,+Santiago+de+Compostela" target="_blank">🗺️ Ver</a></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🌿 Excursiones</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🌊</div><div class="item-body"><div class="item-name">Costa da Morte — Fisterra</div><div class="item-desc">El "fin del mundo" de los peregrinos. A 1h30 de Santiago. Faro de Fisterra, paisaje dramático del Atlántico.</div><span class="item-tag tag-walk">🚶 Excursión</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Faro+de+Fisterra" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🏖️</div><div class="item-body"><div class="item-name">Rías Baixas — O Grove</div><div class="item-desc">Playas preciosas y mariscos increíbles. A 1 hs de Santiago.</div><span class="item-tag tag-food">🍽️ Mariscos</span></div><a class="item-map-btn" href="https://maps.google.com/?q=O+Grove,+Pontevedra" target="_blank">🗺️ Ver</a></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🐙 Gastronomía gallega</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🐙</div><div class="item-body"><div class="item-name">Pulpo á feira</div><div class="item-desc">El plato más icónico. Cocido con pimentón, sal gruesa y aceite. Los puestos del Mercado de Abastos son los mejores.</div><span class="item-tag tag-food">🍽️ Típico</span></div></div>
+      <div class="item"><div class="item-icon">🥧</div><div class="item-body"><div class="item-name">Tarta de Santiago</div><div class="item-desc">Almendras con la Cruz de Santiago en azúcar. En todas las pastelerías. La nena la va a adorar.</div><span class="item-tag tag-baby">👶 Para todos</span></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">💡 Tips Santiago</div>
+    <div class="tip-box"><strong>Lluvia:</strong> Santiago es famosa por llover. Los soportales de las rúas históricas te salvan — podés caminar horas sin mojarte.<br><br><strong>Botafumeiro:</strong> Miércoles 29 abril y domingo 3 mayo. Confirmá en la Catedral al llegar.<br><br><strong>1° de Mayo:</strong> Festivo en España — algunos comercios cerrados, pero los restaurantes y atracciones principales están abiertos.</div>
+  </div>
+</div>
+
+<!-- PORTO -->
+<div id="porto" class="page">
+  <button class="back-btn" onclick="showPage('overview')">← Volver al resumen</button>
+  <div class="city-header">
+    <div><div class="city-title">Porto</div><div class="city-country">🇵🇹 Portugal</div></div>
+    <div class="city-dates-badge"><div class="nights">2</div><div class="nights-label">noches</div></div>
+  </div>
+  <div class="drive-info">
+    <div class="drive-icon">🚗</div>
+    <div class="drive-detail"><div class="drive-km">~170 km</div><div class="drive-dur">Santiago → Porto · ~2 hs por AP-9 y A-3</div></div>
+    <a class="item-map-btn" href="https://maps.google.com/maps/dir/Santiago+de+Compostela/Porto,+Portugal" target="_blank">🗺️ Ruta</a>
+  </div>
+  <div class="hotel-card">
+    <div class="hotel-icon">🏠</div>
+    <div class="hotel-detail"><div class="hotel-name">Airbnb · Rua da Alegria 362</div><div class="hotel-dates">Vie 1 May — Dom 3 May · 2 noches · Porto 4000-035</div></div>
+    <a class="hotel-map-btn" href="https://maps.google.com/?q=Rua+da+Alegria+362,+Porto,+Portugal" target="_blank">🗺️ Maps</a>
+  </div>
+  <a class="map-btn" href="https://maps.google.com/?q=Porto,+Portugal" target="_blank">📍 Abrir Porto en Maps</a>
+
+  <div class="section">
+    <div class="section-title">🍷 Lo imperdible</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🍷</div><div class="item-body"><div class="item-name">Bodegas de Oporto — Vila Nova de Gaia</div><div class="item-desc">Sandeman, Graham's, Taylor's, Ferreira. Cruzando el puente Dom Luís. Tour + degustación. Sandeman tiene terraza con vistas increíbles.</div><span class="item-tag tag-food">🍽️ Imperdible</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Vila+Nova+de+Gaia,+Porto" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🌉</div><div class="item-body"><div class="item-name">Puente Dom Luís I</div><div class="item-desc">El puente icónico. El nivel inferior es peatonal. Vistas del Douro y las bodegas al otro lado.</div><span class="item-tag tag-walk">🚶 Foto imperdible</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Ponte+Dom+Luís+I,+Porto" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🧱</div><div class="item-body"><div class="item-name">Ribeira — Orilla del Douro</div><div class="item-desc">Casas coloridas, restaurantes al agua. Los rabelos (barcos de vino) anclados. Paseo en barco por el Douro — la nena va a amar el barco.</div><span class="item-tag tag-walk">🚶 Paseo</span><span class="item-tag tag-baby">👶 Barco!</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Ribeira,+Porto" target="_blank">🗺️ Ver</a></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🏛️ Arquitectura</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🔵</div><div class="item-body"><div class="item-name">Estación de São Bento — Azulejos</div><div class="item-desc">La estación más bella de Europa. Cubierta de azulejos azules que narran la historia de Portugal. Entrada libre.</div><span class="item-tag tag-culture">🎭 Arte</span><span class="item-tag tag-baby">👶 Impresionante</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Estação+de+São+Bento,+Porto" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">⛪</div><div class="item-body"><div class="item-name">Iglesia de San Francisco — Interior dorado</div><div class="item-desc">Interior barroco completamente recubierto de oro. Absolutamente impresionante.</div><span class="item-tag tag-culture">🎭 Cultura</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Igreja+de+São+Francisco,+Porto" target="_blank">🗺️ Ver</a></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">💡 Tips Porto</div>
+    <div class="tip-box"><strong>Topografía:</strong> Porto es muy empinada. Con cochecito, la Ribeira (orillas del río) es plana y perfecta.<br><br><strong>Francesinha:</strong> El sándwich icónico — pan, carne, cubierto de queso derretido y salsa de tomate y cerveza. Brutal. Café Santiago o O Capa Negra.<br><br><strong>Airbnb:</strong> La Rua da Alegria está en Bonfim, a 10 min a pie del centro. Muy buena ubicación.</div>
+  </div>
+</div>
+
+<!-- LISBOA -->
+<div id="lisboa" class="page">
+  <button class="back-btn" onclick="showPage('overview')">← Volver al resumen</button>
+  <div class="city-header">
+    <div><div class="city-title">Lisboa</div><div class="city-country">🇵🇹 Portugal · Capital</div></div>
+    <div class="city-dates-badge"><div class="nights">4</div><div class="nights-label">noches</div></div>
+  </div>
+  <div class="drive-info">
+    <div class="drive-icon">🚗</div>
+    <div class="drive-detail"><div class="drive-km">~310 km</div><div class="drive-dur">Porto → Lisboa · ~3 hs por A1</div></div>
+    <a class="item-map-btn" href="https://maps.google.com/maps/dir/Porto/Lisboa" target="_blank">🗺️ Ruta</a>
+  </div>
+  <div class="hotel-card">
+    <div class="hotel-icon">🏠</div>
+    <div class="hotel-detail"><div class="hotel-name">Airbnb · Av. Eng. Duarte Pacheco 5, Piso Int. Letra E</div><div class="hotel-dates">Dom 3 May — Jue 7 May · 4 noches · Lisboa 1070-100</div></div>
+    <a class="hotel-map-btn" href="https://maps.google.com/?q=Avenida+Engenheiro+Duarte+Pacheco+5,+Lisboa,+Portugal" target="_blank">🗺️ Maps</a>
+  </div>
+  <a class="map-btn" href="https://maps.google.com/?q=Lisboa,+Portugal" target="_blank">📍 Abrir Lisboa en Maps</a>
+
+  <div class="section">
+    <div class="section-title">🏰 Barrios históricos</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🏰</div><div class="item-body"><div class="item-name">Castelo de São Jorge</div><div class="item-desc">En la colina más alta. Vistas panorámicas. Dentro hay pavos reales sueltos — la nena va a flipar.</div><span class="item-tag tag-culture">🎭 Cultura</span><span class="item-tag tag-baby">👶 Pavos reales!</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Castelo+de+São+Jorge,+Lisboa" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🐱</div><div class="item-body"><div class="item-name">Alfama — Barrio más antiguo</div><div class="item-desc">Calles laberínticas, gatos por todos lados, fado en vivo de noche. Miradores de Santa Luzia y Portas do Sol.</div><span class="item-tag tag-walk">🚶 Paseo</span><span class="item-tag tag-baby">👶 Gatos!</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Alfama,+Lisboa" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🍮</div><div class="item-body"><div class="item-name">Belém — Torre + Monasterio + Pasteles</div><div class="item-desc">Torre de Belém, Monasterio de los Jerónimos (UNESCO), y la fábrica original de Pastéis de Belém. Zona muy plana y accesible con cochecito.</div><span class="item-tag tag-culture">🎭 Imperdible</span><span class="item-tag tag-food">🍽️ Pasteles</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Torre+de+Belém,+Lisboa" target="_blank">🗺️ Ver</a></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🚃 Tranvías y ascensores</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🚃</div><div class="item-body"><div class="item-name">Tranvía 28</div><div class="item-desc">El tranvía amarillo que atraviesa Alfama. Muy turístico — cuidado con el bolso. La nena lo va a amar.</div><span class="item-tag tag-baby">👶 Para la nena</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Largo+Martim+Moniz,+Lisboa" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🛗</div><div class="item-body"><div class="item-name">Elevador de Santa Justa</div><div class="item-desc">Ascensor neogótico de hierro forjado. Pasarela con vistas increíbles del centro.</div><span class="item-tag tag-baby">👶 Le encanta</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Elevador+de+Santa+Justa,+Lisboa" target="_blank">🗺️ Ver</a></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🐠 Para la familia</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🦈</div><div class="item-body"><div class="item-name">Oceanario de Lisboa</div><div class="item-desc">Uno de los mejores acuarios del mundo. La nena va a quedarse con la boca abierta. Imprescindible con bebé.</div><span class="item-tag tag-baby">👶 Imprescindible</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Oceanário+de+Lisboa" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🌿</div><div class="item-body"><div class="item-name">Parque das Nações</div><div class="item-desc">Zona moderna junto al río. Muy plana, perfecta para cochecito. Teleférico, zona de juegos. Bueno para el día del acuario.</div><span class="item-tag tag-baby">👶 Ideal</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Parque+das+Nações,+Lisboa" target="_blank">🗺️ Ver</a></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">💡 Tips Lisboa</div>
+    <div class="tip-box"><strong>Airbnb ubicación:</strong> La Av. Duarte Pacheco está en Campolide — bien conectado, a 15 min del centro.<br><br><strong>Con cochecito:</strong> Belém y Parque das Nações son las zonas más cómodas. Alfama tiene muchas escaleras — usá el portabebé.<br><br><strong>Pastéis de Belém:</strong> La cola avanza rápido. Recién salidos del horno son otro nivel.<br><br><strong>Fado:</strong> Si pueden conseguir niñera una noche, escuchar fado en Alfama es una experiencia única.</div>
+  </div>
+</div>
+
+<!-- TRUJILLO -->
+<div id="trujillo" class="page">
+  <button class="back-btn" onclick="showPage('overview')">← Volver al resumen</button>
+  <div class="city-header">
+    <div><div class="city-title">Trujillo</div><div class="city-country">🇪🇸 Extremadura · Parada intermedia</div></div>
+    <div class="city-dates-badge"><div class="nights">1</div><div class="nights-label">noche</div></div>
+  </div>
+  <div class="drive-info">
+    <div class="drive-icon">🚗</div>
+    <div class="drive-detail"><div class="drive-km">~260 km</div><div class="drive-dur">Lisboa → Trujillo · ~2.5 hs por A-6</div></div>
+    <a class="item-map-btn" href="https://maps.google.com/maps/dir/Lisboa/Trujillo,+Cáceres" target="_blank">🗺️ Ruta</a>
+  </div>
+  <div class="hotel-card">
+    <div class="hotel-icon">🏨</div>
+    <div class="hotel-detail"><div class="hotel-name">Izan Trujillo</div><div class="hotel-dates">Jue 7 May — Vie 8 May · 1 noche</div></div>
+    <a class="hotel-map-btn" href="https://maps.google.com/?q=Izan+Trujillo,+Trujillo,+Cáceres" target="_blank">🗺️ Maps</a>
+  </div>
+  <a class="map-btn" href="https://maps.google.com/?q=Trujillo,+Cáceres,+España" target="_blank">📍 Abrir Trujillo en Maps</a>
+
+  <div class="tip-box" style="margin-bottom:16px"><strong>¿Por qué Trujillo?</strong> Cuna de Francisco Pizarro (conquistador del Perú). Ciudad medieval perfectamente conservada, casi sin turistas. Una joya escondida de Extremadura.</div>
+
+  <div class="section">
+    <div class="section-title">🏰 Qué ver</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🏰</div><div class="item-body"><div class="item-name">Castillo árabe de Trujillo</div><div class="item-desc">En lo alto del cerro, vistas a toda Extremadura. Cigüeñas anidando en las torres en mayo — la nena va a alucinar.</div><span class="item-tag tag-culture">🎭 Impresionante</span><span class="item-tag tag-baby">👶 Cigüeñas!</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Castillo+de+Trujillo,+Cáceres" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">⛪</div><div class="item-body"><div class="item-name">Plaza Mayor de Trujillo</div><div class="item-desc">Estatua ecuestre de Pizarro, palacios renacentistas, cigüeñas en los campanarios. Una de las plazas más bonitas de España.</div><span class="item-tag tag-walk">🚶 Imperdible</span></div><a class="item-map-btn" href="https://maps.google.com/?q=Plaza+Mayor+de+Trujillo,+Cáceres" target="_blank">🗺️ Ver</a></div>
+      <div class="item"><div class="item-icon">🐷</div><div class="item-body"><div class="item-name">Jamón ibérico de bellota extremeño</div><div class="item-desc">Extremadura produce el mejor jamón del mundo. Cualquier bar de la plaza te da una tapa de primera.</div><span class="item-tag tag-food">🍽️ Imperdible</span></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">💡 Tips Trujillo</div>
+    <div class="tip-box"><strong>Cáceres:</strong> Ciudad medieval a 45 min que también vale muchísimo. Si llegás temprano desde Lisboa, podés parar de paso.<br><br><strong>Próximo día:</strong> Trujillo → Madrid son ~250 km / 2.5 hs. Muy manejable para devolver el auto.</div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div id="checklist" class="page">
+  <div style="font-family:'Playfair Display',serif; font-size:22px; color:var(--gold-light); margin-bottom:16px; font-weight:700;">✓ Lista del viaje</div>
+
+  <div class="section">
+    <div class="section-title">📋 Documentos</div>
+    <div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Pasaportes vigentes (los 3)</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Seguro de viaje</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Confirmaciones de alojamiento (PDF offline)</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Confirmación de alquiler de auto</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Licencia de conducir internacional</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Tickets vuelo Iberia en el celular</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Tarjeta de crédito con cobertura internacional</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">👶 Para la nena</div>
+    <div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Cochecito liviano / carrito</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Portabebé (para zonas con escaleras)</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Sillita de auto (consultar con agencia de alquiler)</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Audífonos / cancelación de ruido para el vuelo</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Comida favorita para el vuelo y primeros días</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Medicamentos habituales + termómetro</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Juguetes / entretenimiento para el avión</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Peluche / manta para dormir en lugares nuevos</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Ropa suficiente (clima variable en el norte)</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Impermeable para los tres</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🧳 Equipaje general</div>
+    <div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Adaptador de enchufe europeo tipo F</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Power bank cargado</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">SIM internacional o plan de roaming activado</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Euros en efectivo (mínimo 200€ para imprevistos)</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Medicamentos personales + botiquín básico</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="check-text">Protector solar</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📱 Apps útiles</div>
+    <div class="item-list">
+      <div class="item"><div class="item-icon">🗺️</div><div class="item-body"><div class="item-name">Google Maps — mapas offline</div><div class="item-desc">Descargá España y Portugal para usar sin internet</div></div></div>
+      <div class="item"><div class="item-icon">🌦️</div><div class="item-body"><div class="item-name">AccuWeather o Windy</div><div class="item-desc">El norte de España tiene clima muy variable</div></div></div>
+      <div class="item"><div class="item-icon">🚗</div><div class="item-body"><div class="item-name">Waze o Google Maps</div><div class="item-desc">Para rutas y peajes — hay muchos en España y Portugal</div></div></div>
+      <div class="item"><div class="item-icon">🍽️</div><div class="item-body"><div class="item-name">TheFork / ElTenedor</div><div class="item-desc">Reservas de restaurantes con descuentos</div></div></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const map = { overview:0, madrid1:1, sansebastian:2, bilbao:3, oviedo:4, santiago:5, porto:6, lisboa:7, trujillo:8, checklist:9 };
+  const btns = document.querySelectorAll('.nav-btn');
+  if (btns[map[id]]) btns[map[id]].classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function toggleCheck(el) {
+  el.classList.toggle('done');
+  el.querySelector('.checkbox').textContent = el.classList.contains('done') ? '✓' : '';
+}
+</script>
+</body>
+</html>
